@@ -1,0 +1,58 @@
+# Dependencies (keep package-lock.json tracked)
+node_modules/
+
+# Expo
+.expo/
+/dist/
+/web-build/
+expo-env.d.ts
+
+# Generated native projects (Expo Continuous Native Generation)
+# Remove these rules if native projects become manually maintained.
+/ios/
+/android/
+.kotlin/
+
+# Native signing credentials and local build credentials
+*.orig.*
+*.jks
+*.keystore
+*.p8
+*.p12
+*.pfx
+*.key
+*.pem
+*.mobileprovision
+*.provisionprofile
+credentials.json
+
+# Metro
+.metro-health-check*
+
+# Logs and caches
+*.log
+.npm/
+.eslintcache
+.cache/
+
+# Test output
+/coverage/
+
+# OS and local editor files
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+*.swo
+
+# Environment variables (commit only placeholder examples)
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# TypeScript
+*.tsbuildinfo
+
+# Starter code archived by npm run reset-project
+/example/
