@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { View, Text, TextInput, Button, Alert, FlatList } from "react-native";
 import { pickToday } from "../src/lib/today";
+import { matchesExpression } from "../src/lib/expression-matcher";
 import { loadSentences, saveSentence, getYesterdaySentence, Sentence } from "../src/lib/storage";
 import { scheduleNextDayReminder } from "../src/lib/reminder";
 
@@ -29,7 +30,10 @@ export default function TodayScreen() {
   // read-modify-write 경쟁이 발생할 수 있다. 즉시 재진입 잠금과 저장 버튼 비활성화를
   // 검토하고 저장소 계층에서도 쓰기를 직렬화한다(src/lib/storage.ts 참고).
   async function onSave() {
-    if (!text.includes(today.expression)) {
+    // expression은 화면 표시용이고 생략 기호(…?)가 있으므로 직접 includes로 검사하지 않는다.
+    // 오늘 표현의 type/pattern을 공통 순수 함수에 전달해 고정 단어와 각 gap(기본 1~5단어)을
+    // 검사한다. 다른 화면도 같은 함수를 사용해야 표현 판정 정책을 일관되게 유지할 수 있다.
+    if (!matchesExpression(text, today)) {
       Alert.alert("오늘의 표현을 넣어서 만들어 주세요");
       return;
     }

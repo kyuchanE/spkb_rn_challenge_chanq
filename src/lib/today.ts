@@ -9,7 +9,7 @@ export function todayKey(now: Date = new Date()): string {
 }
 
 // TODO(ISSUE-08, P2): 월의 일자만 사용해 월 경계에서 콘텐츠 순환이 끊긴다.
-// 현재 표현 3개 기준으로도 31일과 다음 달 1일은 둘 다 인덱스 1이다.
+// 현재 표현 5개 기준으로도 31일과 다음 달 1일은 둘 다 인덱스 1이다.
 // 기준일부터 경과한 달력 일수 또는 날짜별 콘텐츠 매핑을 검토하고 빈 배열 정책도 정한다.
 // ISSUE-02: 이 함수 자체는 날짜 변경 이벤트를 감지하지 않으므로 호출 시점 갱신이 별도로 필요하다.
 export function pickToday(now: Date = new Date()): Expression {
