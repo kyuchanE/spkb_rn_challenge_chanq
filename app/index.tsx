@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { View, Text, TextInput, Button, Alert, FlatList } from "react-native";
-import { pickToday } from "../src/lib/today";
+import { Alert, Button, FlatList, Text, TextInput, View } from "react-native";
 import { matchesExpression } from "../src/lib/expression-matcher";
-import { loadSentences, saveSentence, getYesterdaySentence, Sentence } from "../src/lib/storage";
 import { scheduleNextDayReminder } from "../src/lib/reminder";
+import { getYesterdaySentence, loadSentences, saveSentence, Sentence } from "../src/lib/storage";
+import { pickToday } from "../src/lib/today";
 
 // 구조 메모(미구현): TodayScreen → useTodayLearning → SentenceRepository / ReminderScheduler.
 // 화면은 입력·표시를 담당하고 표현 검증·학습일·복습 대상 선택은 순수 함수로 유지한다.
@@ -54,8 +54,8 @@ export default function TodayScreen() {
       // 방향: 검증 → 저장 → 저장 성공 반영 → 알림 예약/갱신, 알림 실패는 별도 안내.
       // 저장 성공과 알림 성공을 분리하고 필요하면 알림 예약 대기 상태와 재진입 재시도를 둔다.
       // 검증 기준: 알림 권한을 거절해도 문장은 저장되어야 한다(현재는 미충족).
-      await scheduleNextDayReminder();
       await saveSentence(today.id, text);
+
       // TODO(ISSUE-09, P2): text/today는 이 이벤트 핸들러의 렌더 시점 스냅샷이다.
       // await 중 새로 편집한 입력도 아래 초기화로 지워질 수 있으며, 저장소에서 나중에
       // 계산한 날짜가 자정을 넘어 기존 표현의 학습일과 어긋날 수 있다.
@@ -66,6 +66,8 @@ export default function TodayScreen() {
       // saveSentence가 저장한 Sentence를 반환해 성공 결과를 반영하고, 저장/알림/화면 갱신
       // 실패를 구분한다. 저장 성공 뒤 후속 실패에도 저장 결과가 정확히 안내되는지 검증한다.
       setList(await loadSentences());
+
+      await scheduleNextDayReminder();
     } finally {
       // 알림 권한 요청부터 목록 갱신까지 잠금을 유지하고 성공/실패 모두 해제한다.
       // 예외를 삼키지는 않는다. 단계별 실패 안내와 저장 성공 구분은 ISSUE-04로 남긴다.
